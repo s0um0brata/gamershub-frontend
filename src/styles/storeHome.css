@@ -1195,6 +1195,21 @@
   animation: wishlistMessageIn 0.3s ease;
 }
 
+.cart-message {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin: 15px 0 0;
+  padding: 10px 15px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  background: rgba(139, 92, 246, 0.1);
+  color: #c4b5fd;
+  font-size: 13px;
+  font-weight: 500;
+  animation: wishlistMessageIn 0.3s ease;
+}
+
 @keyframes wishlistMessageIn {
   from {
     opacity: 0;

@@ -10,6 +10,8 @@ import {
 
 import gameService from "../../services/gameService.js";
 import wishlistService from "../../services/wishlistService.js";
+import cartService from "../../services/cartService.js";
+
 import StoreNavbar from "./StoreNavbar.jsx";
 import StoreFooter from "./StoreFooter.jsx";
 
@@ -22,6 +24,8 @@ function GameDetails() {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
   const [wishlistMessage, setWishlistMessage] = useState("");
+  const [cartLoading, setCartLoading] = useState(false);
+  const [cartMessage, setCartMessage] = useState("");
 
   useEffect(() => {
     const fetchGameDetails = async () => {
@@ -87,6 +91,25 @@ function GameDetails() {
       );
     } finally {
       setWishlistLoading(false);
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (!game?._id) return;
+
+    try {
+      setCartLoading(true);
+      setCartMessage("");
+
+      await cartService.addToCart(game._id);
+
+      setCartMessage("Game added to your cart!");
+    } catch (error) {
+      setCartMessage(
+        error.response?.data?.message || "Unable to add game to your cart.",
+      );
+    } finally {
+      setCartLoading(false);
     }
   };
 
@@ -200,9 +223,19 @@ function GameDetails() {
                       ? "Remove from Wishlist"
                       : "Add to Wishlist"}
                 </button>
-                <button className="game-add-to-cart-btn" type="button">
-                  <ShoppingCart size={19} />
-                  Add to Cart
+                <button
+                  className="game-add-to-cart-btn"
+                  type="button"
+                  onClick={handleAddToCart}
+                  disabled={cartLoading}
+                >
+                  {cartLoading ? (
+                    <LoaderCircle size={19} className="game-details-loader" />
+                  ) : (
+                    <ShoppingCart size={19} />
+                  )}
+
+                  {cartLoading ? "Adding..." : "Add to Cart"}
                 </button>
 
                 <button className="game-buy-now-btn" type="button">
@@ -212,6 +245,7 @@ function GameDetails() {
               {wishlistMessage && (
                 <p className="wishlist-message">{wishlistMessage}</p>
               )}
+              {cartMessage && <p className="cart-message">{cartMessage}</p>}
             </div>
           </div>
         </section>

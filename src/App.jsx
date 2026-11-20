@@ -13,6 +13,7 @@ import GameDetails from "./pages/store/GameDetails.jsx";
 import Register from "./pages/auth/Register.jsx";
 import Login from "./pages/auth/Login.jsx";
 import Profile from "./pages/store/Profile.jsx";
+import Cart from "./components/store/Cart.jsx";
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/cart" element={<Cart />} />
 
       <Route path="/admin/login" element={<AdminLogin />} />
 

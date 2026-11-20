@@ -102,9 +102,13 @@ function StoreNavbar() {
             </>
           )}
 
-          <button className="store-icon-button" aria-label="Shopping cart">
+          <Link
+            to="/cart"
+            className="store-icon-button"
+            aria-label="Shopping cart"
+          >
             <ShoppingCart size={20} />
-          </button>
+          </Link>
 
           <button
             className="store-menu-toggle"
