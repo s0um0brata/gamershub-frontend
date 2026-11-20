@@ -1148,6 +1148,64 @@
   gap: 10px;
 }
 
+.game-wishlist-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 20px;
+  border: 1px solid #8b5cf6;
+  border-radius: 9px;
+  background: transparent;
+  color: #c4b5fd;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.game-wishlist-btn:hover {
+  background: rgba(139, 92, 246, 0.15);
+  border-color: #a78bfa;
+  transform: translateY(-3px);
+}
+
+.game-wishlist-btn.active {
+  background: rgba(139, 92, 246, 0.15);
+  color: #c4b5fd;
+}
+
+.game-wishlist-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.wishlist-message {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin: 15px 0 0;
+  padding: 10px 15px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 8px;
+  background: rgba(139, 92, 246, 0.1);
+  color: #c4b5fd;
+  font-size: 13px;
+  font-weight: 500;
+  animation: wishlistMessageIn 0.3s ease;
+}
+
+@keyframes wishlistMessageIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .game-add-to-cart-btn {
   display: inline-flex;
   align-items: center;

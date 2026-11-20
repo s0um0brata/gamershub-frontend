@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Gamepad2, ShoppingCart, ArrowLeft, LoaderCircle } from "lucide-react";
+import {
+  Gamepad2,
+  ShoppingCart,
+  ArrowLeft,
+  LoaderCircle,
+  Heart,
+} from "lucide-react";
 
 import gameService from "../../services/gameService.js";
+import wishlistService from "../../services/wishlistService.js";
 import StoreNavbar from "./StoreNavbar.jsx";
 import StoreFooter from "./StoreFooter.jsx";
 
@@ -12,6 +19,9 @@ function GameDetails() {
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+  const [wishlistMessage, setWishlistMessage] = useState("");
 
   useEffect(() => {
     const fetchGameDetails = async () => {
@@ -20,7 +30,14 @@ function GameDetails() {
 
       try {
         const response = await gameService.getGameBySlug(slug);
-        setGame(response?.data?.game || null);
+
+        const fetchedGame = response?.data?.game || null;
+
+        setGame(fetchedGame);
+
+        if (fetchedGame?._id) {
+          checkWishlistStatus(fetchedGame._id);
+        }
       } catch (error) {
         console.error("Failed to fetch game details:", error);
         setError(
@@ -35,6 +52,43 @@ function GameDetails() {
       fetchGameDetails();
     }
   }, [slug]);
+
+  const checkWishlistStatus = async (gameId) => {
+    try {
+      const response = await wishlistService.getWishlist();
+
+      const wishlistGames = response.data?.wishlist || [];
+
+      setIsWishlisted(wishlistGames.some((item) => item._id === gameId));
+    } catch (error) {
+      console.error("Failed to check wishlist status:", error);
+    }
+  };
+
+  const handleWishlistToggle = async () => {
+    if (!game?._id) return;
+
+    try {
+      setWishlistLoading(true);
+      setWishlistMessage("");
+
+      if (isWishlisted) {
+        await wishlistService.removeFromWishlist(game._id);
+        setIsWishlisted(false);
+        setWishlistMessage("Removed from your wishlist.");
+      } else {
+        await wishlistService.addToWishlist(game._id);
+        setIsWishlisted(true);
+        setWishlistMessage("Added to your wishlist!");
+      }
+    } catch (error) {
+      setWishlistMessage(
+        error.response?.data?.message || "Unable to update your wishlist.",
+      );
+    } finally {
+      setWishlistLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -125,6 +179,27 @@ function GameDetails() {
                   )}
               </div>
               <div className="game-details-actions">
+                <button
+                  className={`game-wishlist-btn ${isWishlisted ? "active" : ""}`}
+                  type="button"
+                  onClick={handleWishlistToggle}
+                  disabled={wishlistLoading}
+                >
+                  {wishlistLoading ? (
+                    <LoaderCircle size={19} className="game-details-loader" />
+                  ) : (
+                    <Heart
+                      size={19}
+                      fill={isWishlisted ? "currentColor" : "none"}
+                    />
+                  )}
+
+                  {wishlistLoading
+                    ? "Please wait..."
+                    : isWishlisted
+                      ? "Remove from Wishlist"
+                      : "Add to Wishlist"}
+                </button>
                 <button className="game-add-to-cart-btn" type="button">
                   <ShoppingCart size={19} />
                   Add to Cart
@@ -134,6 +209,9 @@ function GameDetails() {
                   Buy Now
                 </button>
               </div>
+              {wishlistMessage && (
+                <p className="wishlist-message">{wishlistMessage}</p>
+              )}
             </div>
           </div>
         </section>
