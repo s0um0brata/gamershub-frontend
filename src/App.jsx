@@ -1,0 +1,44 @@
+import { Routes, Route, Navigate } from "react-router-dom";
+
+import AdminLogin from "./pages/auth/AdminLogin.jsx";
+import AdminGames from "./pages/admin/AdminGames.jsx";
+import ProtectedAdminRoute from "./components/common/ProtectedAdminRoute.jsx";
+import AdminLayout from "./layouts/AdminLayout.jsx";
+import AddGame from "./pages/admin/AddGame.jsx";
+import AdminCategories from "./pages/admin/AdminCategories.jsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import EditGame from "./pages/admin/EditGame.jsx";
+import StoreHome from "./pages/store/StoreHome.jsx";
+import GameDetails from "./pages/store/GameDetails.jsx";
+import Register from "./pages/auth/Register.jsx";
+import Login from "./pages/auth/Login.jsx";
+import Profile from "./pages/store/Profile.jsx";
+
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<StoreHome />} />
+      <Route path="/game/:slug" element={<GameDetails />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/profile" element={<Profile />} />
+
+      <Route path="/admin/login" element={<AdminLogin />} />
+
+      <Route element={<ProtectedAdminRoute />}>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="games" element={<AdminGames />} />
+          <Route path="games/add" element={<AddGame />} />
+          <Route path="games/edit/:gameId" element={<EditGame />} />
+          <Route path="categories" element={<AdminCategories />} />
+        </Route>
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+export default App;

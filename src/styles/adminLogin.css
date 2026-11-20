@@ -1,0 +1,547 @@
+/* =========================================
+   ADMIN LOGIN PAGE
+========================================= */
+
+.admin-login-page {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 45px;
+  background: #09090f;
+  color: #f8fafc;
+  font-family: inherit;
+  isolation: isolate;
+}
+
+/* Background effects */
+
+.login-bg-glow {
+  position: absolute;
+  width: 550px;
+  height: 550px;
+  border-radius: 50%;
+  filter: blur(130px);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.login-bg-glow-one {
+  top: -250px;
+  left: -150px;
+  background: #8b5cf6;
+}
+
+.login-bg-glow-two {
+  right: -200px;
+  bottom: -250px;
+  background: #6d28d9;
+}
+
+.login-grid-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image:
+    linear-gradient(rgba(139, 92, 246, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.12) 1px, transparent 1px);
+  background-size: 55px 55px;
+}
+
+/* Main Container */
+
+.admin-login-container {
+  width: 100%;
+  max-width: 1120px;
+  min-height: 660px;
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  background: #11111a;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.5);
+}
+
+/* =========================================
+   LEFT SHOWCASE
+========================================= */
+
+.admin-login-showcase {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 45px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse at 20% 75%,
+      rgba(124, 58, 237, 0.28),
+      transparent 55%
+    ),
+    linear-gradient(145deg, #1b1530 0%, #11111d 55%, #0d0d15 100%);
+  border-right: 1px solid rgba(139, 92, 246, 0.16);
+}
+
+.admin-login-showcase::before {
+  content: "";
+  position: absolute;
+  width: 340px;
+  height: 340px;
+  right: -120px;
+  bottom: 40px;
+  border: 1px solid rgba(167, 139, 250, 0.16);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 35px rgba(139, 92, 246, 0.025),
+    0 0 0 70px rgba(139, 92, 246, 0.025);
+  pointer-events: none;
+}
+
+.login-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 750;
+  letter-spacing: -0.6px;
+}
+
+.login-brand strong {
+  color: #a78bfa;
+}
+
+.login-brand-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  box-shadow: 0 7px 25px rgba(139, 92, 246, 0.3);
+}
+
+.login-showcase-content {
+  position: relative;
+  z-index: 1;
+  max-width: 440px;
+  margin-top: 30px;
+}
+
+.login-showcase-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 13px;
+  margin-bottom: 27px;
+  border: 1px solid rgba(167, 139, 250, 0.28);
+  border-radius: 30px;
+  background: rgba(139, 92, 246, 0.12);
+  color: #c4b5fd;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1.2px;
+}
+
+.login-showcase-content h1 {
+  margin: 0;
+  font-size: clamp(38px, 4.2vw, 53px);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -2px;
+  color: #ffffff;
+}
+
+.login-showcase-content h1 span {
+  color: #a78bfa;
+}
+
+.login-showcase-content > p {
+  max-width: 390px;
+  margin: 23px 0 30px;
+  color: #a1a1b5;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.login-showcase-features {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-showcase-features div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #d4d4e4;
+  font-size: 13px;
+}
+
+.login-showcase-features svg {
+  color: #a78bfa;
+}
+
+.login-showcase-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #77758c;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+}
+
+/* =========================================
+   RIGHT LOGIN SECTION
+========================================= */
+
+.admin-login-form-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 48px 35px;
+  background: #11111a;
+}
+
+.admin-login-card {
+  width: 100%;
+  max-width: 390px;
+}
+
+.login-card-icon {
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
+  color: #c4b5fd;
+  background: rgba(139, 92, 246, 0.12);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.09);
+}
+
+.login-eyebrow {
+  display: block;
+  margin-bottom: 10px;
+  color: #a78bfa;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 2px;
+}
+
+.login-card-heading h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -0.8px;
+}
+
+.login-card-heading p {
+  margin: 10px 0 30px;
+  color: #9292a8;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* Error Message */
+
+.login-error-message {
+  padding: 13px 15px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  border-radius: 9px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* Form */
+
+.admin-login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+}
+
+.login-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.login-form-group label {
+  color: #d4d4e4;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.login-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 54px;
+  padding: 0 15px;
+  border: 1px solid #303044;
+  border-radius: 10px;
+  background: #171722;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.login-input-wrapper:focus-within {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+.login-input-wrapper > svg {
+  flex-shrink: 0;
+  color: #85829e;
+}
+
+.login-input-wrapper input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.login-input-wrapper input::placeholder {
+  color: #66667d;
+}
+
+.login-password-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border: none;
+  background: transparent;
+  color: #85829e;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.login-password-toggle:hover {
+  color: #c4b5fd;
+}
+
+/* Submit Button */
+
+.admin-login-submit {
+  width: 100%;
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(110deg, #7c3aed, #9333ea);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.24);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.admin-login-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(124, 58, 237, 0.35);
+}
+
+.admin-login-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.login-submit-arrow {
+  transform: rotate(180deg);
+}
+
+.login-spinner {
+  width: 17px;
+  height: 17px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: login-spin 0.7s linear infinite;
+}
+
+@keyframes login-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Security Note */
+
+.login-security-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 29px;
+  color: #85829e;
+  font-size: 11px;
+}
+
+.login-security-note svg {
+  color: #8b5cf6;
+}
+
+/* Back Link */
+
+.login-back-link {
+  display: flex;
+  justify-content: center;
+  margin-top: 29px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.login-back-link a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #aaa7c0;
+  text-decoration: none;
+  font-size: 12px;
+  transition: color 0.2s ease;
+}
+
+.login-back-link a:hover {
+  color: #c4b5fd;
+}
+
+.login-copyright {
+  margin: 35px 0 0;
+  color: #68677b;
+  font-size: 10px;
+  text-align: center;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 900px) {
+  .admin-login-page {
+    padding: 25px;
+  }
+
+  .admin-login-container {
+    grid-template-columns: 0.85fr 1fr;
+  }
+
+  .admin-login-showcase {
+    padding: 35px 28px;
+  }
+
+  .admin-login-form-section {
+    padding: 40px 28px 30px;
+  }
+
+  .login-showcase-content h1 {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 650px) {
+  .admin-login-page {
+    padding: 18px;
+    align-items: flex-start;
+  }
+
+  .admin-login-container {
+    max-width: 440px;
+    min-height: auto;
+    grid-template-columns: 1fr;
+    border-radius: 16px;
+  }
+
+  .admin-login-showcase {
+    min-height: 240px;
+    padding: 25px;
+    border-right: none;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.16);
+  }
+
+  .login-showcase-content {
+    margin-top: 35px;
+  }
+
+  .login-showcase-content h1 {
+    font-size: 34px;
+    letter-spacing: -1px;
+  }
+
+  .login-showcase-content > p {
+    margin: 15px 0;
+    font-size: 12px;
+  }
+
+  .login-showcase-features {
+    display: none;
+  }
+
+  .login-showcase-footer {
+    margin-top: 30px;
+  }
+
+  .admin-login-form-section {
+    padding: 35px 25px 25px;
+  }
+
+  .login-card-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
+  }
+
+  .login-card-heading h2 {
+    font-size: 26px;
+  }
+
+  .login-copyright {
+    margin-top: 25px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-login-page *,
+  .admin-login-page *::before,
+  .admin-login-page *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

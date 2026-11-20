@@ -1,0 +1,358 @@
+/* =========================================
+   USER REGISTRATION PAGE
+========================================= */
+
+.register-page {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 35px 20px;
+  background: #09090f;
+  color: #f8fafc;
+  isolation: isolate;
+}
+
+.register-page::before,
+.register-page::after {
+  content: "";
+  position: absolute;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  filter: blur(130px);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.register-page::before {
+  top: -220px;
+  left: -150px;
+  background: #8b5cf6;
+}
+
+.register-page::after {
+  right: -180px;
+  bottom: -230px;
+  background: #6d28d9;
+}
+
+/* Main Card */
+
+.register-card {
+  width: 100%;
+  max-width: 470px;
+  padding: 45px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 20px;
+  background: #11111a;
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.5);
+}
+
+/* Header */
+
+.register-header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.register-header > svg {
+  width: 58px;
+  height: 58px;
+  padding: 13px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
+  color: #c4b5fd;
+  background: rgba(139, 92, 246, 0.12);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.09);
+}
+
+.register-header h1 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -0.8px;
+}
+
+.register-header p {
+  margin: 12px 0 0;
+  color: #9292a8;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* Form */
+
+.register-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.register-card .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.register-card .form-group label {
+  color: #d4d4e4;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.register-card .form-group > input,
+.password-input-wrapper {
+  width: 100%;
+  height: 54px;
+  padding: 0 15px;
+  border: 1px solid #303044;
+  border-radius: 10px;
+  background: #171722;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.register-card .form-group > input {
+  color: #ffffff;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.register-card .form-group > input:focus,
+.password-input-wrapper:focus-within {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+.register-card input::placeholder {
+  color: #66667d;
+}
+
+/* Password */
+
+.password-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.password-input-wrapper input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.password-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border: none;
+  background: transparent;
+  color: #85829e;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: #c4b5fd;
+}
+
+/* Messages */
+
+.form-error,
+.form-success {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 9px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.form-error {
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+}
+
+.form-success {
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  background: rgba(34, 197, 94, 0.1);
+  color: #86efac;
+}
+
+/* Submit Button */
+
+.register-card form > button[type="submit"] {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(110deg, #7c3aed, #9333ea);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(124, 58, 237, 0.24);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.register-card form > button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(124, 58, 237, 0.35);
+}
+
+.register-card form > button[type="submit"]:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Footer */
+
+.register-footer {
+  margin: 28px 0 0;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  color: #9292a8;
+  font-size: 12px;
+  text-align: center;
+}
+
+.register-footer a {
+  color: #a78bfa;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.register-footer a:hover {
+  color: #c4b5fd;
+}
+
+/* Responsive */
+
+@media (max-width: 500px) {
+  .register-page {
+    padding: 20px 15px;
+  }
+
+  .register-card {
+    padding: 32px 23px;
+    border-radius: 16px;
+  }
+
+  .register-header h1 {
+    font-size: 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .register-page *,
+  .register-page *::before,
+  .register-page *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* GAMING-INSPIRED ANIMATED BACKGROUND */
+
+.register-page {
+  background-image:
+    linear-gradient(rgba(139, 92, 246, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.035) 1px, transparent 1px);
+  background-size: 45px 45px;
+  animation: gamingGridMove 18s linear infinite;
+}
+
+/* Moving neon energy orbs */
+.register-page::before {
+  animation: gamingOrbOne 12s ease-in-out infinite alternate;
+}
+
+.register-page::after {
+  animation: gamingOrbTwo 15s ease-in-out infinite alternate;
+}
+
+/* Keep the registration card above background effects */
+.register-card {
+  position: relative;
+  z-index: 2;
+  animation: cardEntrance 0.8s ease-out both;
+}
+
+@keyframes gamingGridMove {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 45px 45px;
+  }
+}
+
+@keyframes gamingOrbOne {
+  0% {
+    transform: translate(-30px, -20px) scale(1);
+  }
+  50% {
+    transform: translate(50px, 35px) scale(1.15);
+  }
+  100% {
+    transform: translate(-10px, 65px) scale(0.9);
+  }
+}
+
+@keyframes gamingOrbTwo {
+  0% {
+    transform: translate(30px, 30px) scale(1);
+  }
+  50% {
+    transform: translate(-45px, -35px) scale(1.2);
+  }
+  100% {
+    transform: translate(20px, -55px) scale(0.9);
+  }
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .register-page,
+  .register-page::before,
+  .register-page::after,
+  .register-card {
+    animation: none !important;
+  }
+}
+
+.register-page + .store-footer {
+  margin-top: 0;
+}
