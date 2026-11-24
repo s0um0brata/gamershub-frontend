@@ -118,8 +118,58 @@
   display: none;
 }
 
+
+/* Desktop/mobile authentication visibility */
+.store-auth-desktop {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.store-auth-mobile {
+  display: none;
+}
+
+.store-auth-dropdown-toggle {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #343445;
+  border-radius: 9px;
+  background: #171722;
+  color: #d4d4d8;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.store-auth-dropdown-toggle:hover {
+  border-color: #8b5cf6;
+  color: #a78bfa;
+}
+
+.store-auth-chevron {
+  transition: transform 0.2s ease;
+}
+
+.store-auth-chevron.open {
+  transform: rotate(180deg);
+}
+
+.store-auth-dropdown {
+  min-width: 170px;
+}
+
 /* Responsive Navbar */
-@media (max-width: 850px) {
+@media (max-width: 851px) {
+  .store-auth-desktop {
+    display: none;
+  }
+
+  .store-auth-mobile {
+    display: block;
+  }
+
   .store-navbar-container {
     height: 72px;
   }
@@ -171,9 +221,8 @@
     gap: 8px;
   }
 
-  .store-login-link,
   .store-icon-button {
-    display: none;
+    padding: 6px;
   }
 
   .store-register-button {
@@ -1702,4 +1751,35 @@
   background: rgba(255, 75, 75, 0.12);
   color: #ff4545;
   transform: translateX(3px);
+}
+
+/* Shopping Cart Count Badge */
+.store-icon-button {
+  position: relative;
+}
+
+.store-cart-icon-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.store-cart-count {
+  position: absolute;
+  top: -9px;
+  right: -11px;
+  min-width: 19px;
+  height: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  border: 2px solid #0a0c14;
+  border-radius: 50px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
 }

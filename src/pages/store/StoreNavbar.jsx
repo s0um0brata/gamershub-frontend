@@ -1,9 +1,11 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { ShoppingCart, Search, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { ShoppingCart, Search, Menu, X, ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../features/auth/authThunks.js";
+import cartService from "../../services/cartService.js";
+import { setCartCount, resetCartCount } from "../../features/cart/cartSlice.js";
 
 function StoreNavbar() {
   const dispatch = useDispatch();
@@ -12,6 +14,34 @@ function StoreNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const cartCount = useSelector((state) => state.cart.cartCount);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const loadCartCount = async () => {
+      if (!isAuthenticated) {
+        dispatch(resetCartCount());
+        return;
+      }
+
+      try {
+        const response = await cartService.getCart();
+
+        if (isActive) {
+          dispatch(setCartCount(response.data?.cartCount || 0));
+        }
+      } catch (error) {
+        console.error("Unable to fetch cart count:", error);
+      }
+    };
+
+    loadCartCount();
+
+    return () => {
+      isActive = false;
+    };
+  }, [isAuthenticated, dispatch]);
 
   const handleLogout = async () => {
     try {
@@ -53,61 +83,135 @@ function StoreNavbar() {
             <Search size={20} />
           </button>
 
-          {isAuthenticated ? (
+          {/* Desktop authentication controls */}
+          <div className="store-auth-desktop">
+            {isAuthenticated ? (
+              <div className="store-user-menu">
+                <button
+                  className="store-user-button"
+                  onClick={() => setProfileMenuOpen((prev) => !prev)}
+                  aria-expanded={profileMenuOpen}
+                  aria-label="Open profile menu"
+                >
+                  <span className="store-user-avatar">
+                    {user?.fullName?.charAt(0)?.toUpperCase() || "U"}
+                  </span>
+                  <span className="store-user-name">
+                    {user?.fullName?.split(" ")[0] || "User"}
+                  </span>
+                </button>
+
+                {profileMenuOpen && (
+                  <div className="store-user-dropdown">
+                    <div className="store-user-dropdown-header">
+                      <strong>{user?.fullName || "User"}</strong>
+                      <span>{user?.email}</span>
+                    </div>
+                    <Link
+                      to="/profile"
+                      className="store-user-dropdown-link"
+                      onClick={() => setProfileMenuOpen(false)}
+                    >
+                      My Profile
+                    </Link>
+                    <button
+                      type="button"
+                      className="store-user-dropdown-logout"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <Link to="/login" className="store-login-link">
+                  Login
+                </Link>
+                <Link to="/register" className="store-register-button">
+                  Join Now
+                </Link>
+              </>
+            )}
+          </div>
+
+          {/* Compact authentication dropdown for screens 851px and below */}
+          <div className="store-auth-mobile">
             <div className="store-user-menu">
               <button
-                className="store-user-button"
+                type="button"
+                className="store-auth-dropdown-toggle"
                 onClick={() => setProfileMenuOpen((prev) => !prev)}
+                aria-label={profileMenuOpen ? "Close account menu" : "Open account menu"}
+                aria-expanded={profileMenuOpen}
               >
-                <span className="store-user-avatar">
-                  {user?.fullName?.charAt(0)?.toUpperCase() || "U"}
-                </span>
-
-                <span className="store-user-name">
-                  {user?.fullName?.split(" ")[0] || "User"}
-                </span>
+                <ChevronDown
+                  size={21}
+                  className={profileMenuOpen ? "store-auth-chevron open" : "store-auth-chevron"}
+                />
               </button>
+
               {profileMenuOpen && (
-                <div className="store-user-dropdown">
-                  <div className="store-user-dropdown-header">
-                    <strong>{user?.fullName || "User"}</strong>
-                    <span>{user?.email}</span>
-                  </div>
-                  <Link
-                    to="/profile"
-                    className="store-user-dropdown-link"
-                    onClick={() => setProfileMenuOpen(false)}
-                  >
-                    My Profile
-                  </Link>
-                  <button
-                    type="button"
-                    className="store-user-dropdown-logout"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
+                <div className="store-user-dropdown store-auth-dropdown">
+                  {isAuthenticated ? (
+                    <>
+                      <div className="store-user-dropdown-header">
+                        <strong>{user?.fullName || "User"}</strong>
+                        <span>{user?.email}</span>
+                      </div>
+                      <Link
+                        to="/profile"
+                        className="store-user-dropdown-link"
+                        onClick={() => setProfileMenuOpen(false)}
+                      >
+                        My Profile
+                      </Link>
+                      <button
+                        type="button"
+                        className="store-user-dropdown-logout"
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        to="/login"
+                        className="store-user-dropdown-link"
+                        onClick={() => setProfileMenuOpen(false)}
+                      >
+                        Login
+                      </Link>
+                      <Link
+                        to="/register"
+                        className="store-user-dropdown-link"
+                        onClick={() => setProfileMenuOpen(false)}
+                      >
+                        Join Now
+                      </Link>
+                    </>
+                  )}
                 </div>
               )}
             </div>
-          ) : (
-            <>
-              <Link to="/login" className="store-login-link">
-                Login
-              </Link>
-
-              <Link to="/register" className="store-register-button">
-                Join Now
-              </Link>
-            </>
-          )}
+          </div>
 
           <Link
             to="/cart"
             className="store-icon-button"
-            aria-label="Shopping cart"
+            aria-label={`Shopping cart${cartCount > 0 ? `, ${cartCount} items` : ""}`}
           >
-            <ShoppingCart size={20} />
+            <span className="store-cart-icon-wrapper">
+              <ShoppingCart size={20} />
+
+              {cartCount > 0 && (
+                <span className="store-cart-count">
+                  {cartCount > 99 ? "99+" : cartCount}
+                </span>
+              )}
+            </span>
           </Link>
 
           <button

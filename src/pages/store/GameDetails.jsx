@@ -11,12 +11,15 @@ import {
 import gameService from "../../services/gameService.js";
 import wishlistService from "../../services/wishlistService.js";
 import cartService from "../../services/cartService.js";
+import { setCartCount } from "../../features/cart/cartSlice.js";
+import { useDispatch } from "react-redux";
 
 import StoreNavbar from "./StoreNavbar.jsx";
 import StoreFooter from "./StoreFooter.jsx";
 
 function GameDetails() {
   const { slug } = useParams();
+  const dispatch = useDispatch();
 
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -101,7 +104,9 @@ function GameDetails() {
       setCartLoading(true);
       setCartMessage("");
 
-      await cartService.addToCart(game._id);
+      const response = await cartService.addToCart(game._id);
+
+      dispatch(setCartCount(response.data?.cartCount || 0));
 
       setCartMessage("Game added to your cart!");
     } catch (error) {
