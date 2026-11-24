@@ -104,7 +104,7 @@ function Profile() {
   const menuItems = [
     { id: "profile", label: "My Profile", icon: UserRound },
     { id: "wishlist", label: "My Wishlist", icon: Heart },
-    { id: "cart", label: "My Cart", icon: ShoppingCart },
+    // { id: "cart", label: "My Cart", icon: ShoppingCart },
     { id: "orders", label: "My Orders", icon: Package },
   ];
 

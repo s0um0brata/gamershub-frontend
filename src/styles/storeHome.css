@@ -118,7 +118,6 @@
   display: none;
 }
 
-
 /* Desktop/mobile authentication visibility */
 .store-auth-desktop {
   display: flex;
@@ -1063,6 +1062,37 @@
 
 .store-footer-socials a:active {
   transform: translateY(-1px) scale(0.95);
+}
+
+/* Full-page Loader */
+.game-details-message {
+  min-height: calc(100vh - 70px); /* Adjust for navbar height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  color: #b8b5c7;
+  text-align: center;
+}
+
+.game-details-loader {
+  color: #9147ff;
+  animation: loader-spin 0.9s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(145, 71, 255, 0.45));
+}
+
+.game-details-message p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #a78bfa;
+}
+
+@keyframes loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Game Details Page */
