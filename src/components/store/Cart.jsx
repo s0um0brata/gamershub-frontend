@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ShoppingCart, ArrowLeft, LoaderCircle } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setCartCount } from "../../features/cart/cartSlice.js";
 
 import cartService from "../../services/cartService.js";
 import StoreNavbar from "../../pages/store/StoreNavbar.jsx";
@@ -11,6 +13,9 @@ function Cart() {
   const [cartData, setCartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [removingGameId, setRemovingGameId] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -31,6 +36,39 @@ function Cart() {
   }, []);
 
   const cartItems = cartData?.cart || [];
+
+  const handleProceedToCheckout = () => {
+    navigate("/payment");
+  };
+
+  const handleRemoveFromCart = async (gameId) => {
+    try {
+      setRemovingGameId(gameId);
+      setError("");
+
+      const response = await cartService.removeFromCart(gameId);
+
+      // Update Redux cart count
+      dispatch(setCartCount(response.data.cartCount));
+
+      // Refresh cart data and order summary
+      const updatedCart = await cartService.getCart();
+
+      setCartData(updatedCart.data);
+      dispatch(setCartCount(updatedCart.data.cartCount));
+    } catch (error) {
+      console.error("Remove cart error:", error);
+      console.error("Error response:", error.response?.data);
+
+      setError(
+        error.response?.data?.message ||
+          error.message ||
+          "Unable to remove game from cart.",
+      );
+    } finally {
+      setRemovingGameId(null);
+    }
+  };
 
   return (
     <>
@@ -99,6 +137,16 @@ function Cart() {
                           {game.discountPrice < game.price && (
                             <del>₹{game.price.toLocaleString("en-IN")}</del>
                           )}
+                          <button
+                            type="button"
+                            className="cart-remove-button"
+                            onClick={() => handleRemoveFromCart(game._id)}
+                            disabled={removingGameId === game._id}
+                          >
+                            {removingGameId === game._id
+                              ? "Removing..."
+                              : "Remove"}
+                          </button>
                         </div>
                       </div>
                     </article>
@@ -128,13 +176,13 @@ function Cart() {
                   </strong>
                 </div>
 
-                <button type="button" className="cart-checkout-button" disabled>
+                <button
+                  type="button"
+                  className="cart-checkout-button"
+                  onClick={handleProceedToCheckout}
+                >
                   Proceed to Checkout
                 </button>
-
-                <p className="cart-checkout-note">
-                  Checkout functionality will be added later.
-                </p>
               </aside>
             </div>
           )}

@@ -14,7 +14,9 @@ import Register from "./pages/auth/Register.jsx";
 import Login from "./pages/auth/Login.jsx";
 import Profile from "./pages/store/Profile.jsx";
 import Cart from "./components/store/Cart.jsx";
-
+import Payment from "./pages/store/Payment.jsx";
+import PaymentSuccess from "./pages/store/PaymentSuccess.jsx";
+import PaymentCancel from "./pages/store/PaymentCancel.jsx";
 
 function App() {
   return (
@@ -25,6 +27,10 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/payment" element={<Payment />} />
+      <Route path="/cart/payment" element={<Payment />} />
+      <Route path="/payment/success" element={<PaymentSuccess />} />
+      <Route path="/payment/cancel" element={<PaymentCancel />} />
 
       <Route path="/admin/login" element={<AdminLogin />} />
 

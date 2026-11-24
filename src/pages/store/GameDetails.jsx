@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   Gamepad2,
   ShoppingCart,
@@ -20,6 +20,7 @@ import StoreFooter from "./StoreFooter.jsx";
 function GameDetails() {
   const { slug } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -116,6 +117,18 @@ function GameDetails() {
     } finally {
       setCartLoading(false);
     }
+  };
+
+  const handleBuyNow = () => {
+    if (!game?._id) return;
+
+    navigate("/payment", {
+      state: {
+        checkoutType: "buyNow",
+        gameId: game._id,
+        game,
+      },
+    });
   };
 
   if (loading) {
@@ -243,7 +256,11 @@ function GameDetails() {
                   {cartLoading ? "Adding..." : "Add to Cart"}
                 </button>
 
-                <button className="game-buy-now-btn" type="button">
+                <button
+                  className="game-buy-now-btn"
+                  type="button"
+                  onClick={handleBuyNow}
+                >
                   Buy Now
                 </button>
               </div>
