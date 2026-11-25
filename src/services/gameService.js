@@ -25,10 +25,23 @@ const getGameBySlug = async (slug) => {
   return response.data;
 };
 
+// Search published games
+const searchGames = async (search, limit = 5) => {
+  const response = await api.get("/games", {
+    params: {
+      search,
+      limit,
+    },
+  });
+
+  return response.data;
+};
+
 const gameService = {
   getAllGames,
   getFeaturedGames,
   getGameBySlug,
+  searchGames
 };
 
 export default gameService;

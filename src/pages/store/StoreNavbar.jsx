@@ -1,6 +1,17 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { ShoppingCart, Search, Menu, X, ChevronDown } from "lucide-react";
-import { useState, useEffect } from "react";
+import {
+  ShoppingCart,
+  Search,
+  Menu,
+  X,
+  ChevronDown,
+  LoaderCircle,
+  Tag,
+  XCircle,
+} from "lucide-react";
+
+import { useState, useEffect, useRef } from "react";
+import gameService from "../../services/gameService.js";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../features/auth/authThunks.js";
@@ -15,6 +26,12 @@ function StoreNavbar() {
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const cartCount = useSelector((state) => state.cart.cartCount);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState("");
+  const searchWrapperRef = useRef(null);
 
   useEffect(() => {
     let isActive = true;
@@ -56,6 +73,65 @@ function StoreNavbar() {
 
   const closeMenu = () => setMenuOpen(false);
 
+  // Live search with debounce
+  useEffect(() => {
+    if (!searchOpen || !searchTerm.trim()) {
+      setSearchResults([]);
+      setSearchLoading(false);
+      setSearchError("");
+      return;
+    }
+
+    let isActive = true;
+
+    const timer = setTimeout(async () => {
+      try {
+        setSearchLoading(true);
+        setSearchError("");
+
+        const response = await gameService.searchGames(searchTerm.trim(), 5);
+
+        if (isActive) {
+          setSearchResults(response?.data?.games || []);
+        }
+      } catch (error) {
+        if (isActive) {
+          setSearchError("Unable to search games. Please try again.");
+          setSearchResults([]);
+        }
+      } finally {
+        if (isActive) {
+          setSearchLoading(false);
+        }
+      }
+    }, 300);
+
+    return () => {
+      isActive = false;
+      clearTimeout(timer);
+    };
+  }, [searchTerm, searchOpen]);
+
+  // Close search when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchWrapperRef.current &&
+        !searchWrapperRef.current.contains(event.target)
+      ) {
+        setSearchOpen(false);
+        setSearchTerm("");
+        setSearchResults([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <header className="store-navbar">
       <div className="store-navbar-container">
@@ -79,9 +155,96 @@ function StoreNavbar() {
         </nav>
 
         <div className="store-navbar-actions">
-          <button className="store-icon-button" aria-label="Search">
-            <Search size={20} />
-          </button>
+          <div className="store-search-wrapper" ref={searchWrapperRef}>
+            {searchOpen ? (
+              <div className="store-search-input-wrapper">
+                <Search size={18} />
+
+                <input
+                  type="text"
+                  className="store-search-input"
+                  placeholder="Search games or categories..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  autoFocus
+                />
+
+                <button
+                  type="button"
+                  className="store-search-close"
+                  onClick={() => {
+                    setSearchOpen(false);
+                    setSearchTerm("");
+                    setSearchResults([]);
+                  }}
+                  aria-label="Close search"
+                >
+                  <XCircle size={18} />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="store-icon-button"
+                aria-label="Search"
+                onClick={() => setSearchOpen(true)}
+              >
+                <Search size={20} />
+              </button>
+            )}
+            {searchOpen && searchTerm.trim() && (
+              <div className="store-search-dropdown">
+                {searchLoading ? (
+                  <div className="store-search-message">
+                    <LoaderCircle size={20} className="game-details-loader" />
+                    <p>Searching games...</p>
+                  </div>
+                ) : searchError ? (
+                  <div className="store-search-message error">
+                    {searchError}
+                  </div>
+                ) : searchResults.length > 0 ? (
+                  <>
+                    <div className="store-search-heading">
+                      Games ({searchResults.length})
+                    </div>
+
+                    {searchResults.map((game) => (
+                      <button
+                        type="button"
+                        className="store-search-result"
+                        key={game._id}
+                        onClick={() => {
+                          navigate(`/game/${game.slug}`);
+                          setSearchOpen(false);
+                          setSearchTerm("");
+                          setSearchResults([]);
+                        }}
+                      >
+                        <img src={game.coverImage} alt={game.title} />
+
+                        <div className="store-search-result-info">
+                          <strong>{game.title}</strong>
+
+                          <span>
+                            {game.categories?.length > 0
+                              ? game.categories
+                                  .map((category) => category.name)
+                                  .join(", ")
+                              : "PC Game"}
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+                  </>
+                ) : (
+                  <div className="store-search-message">
+                    No games found for "{searchTerm}"
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Desktop authentication controls */}
           <div className="store-auth-desktop">
@@ -143,12 +306,18 @@ function StoreNavbar() {
                 type="button"
                 className="store-auth-dropdown-toggle"
                 onClick={() => setProfileMenuOpen((prev) => !prev)}
-                aria-label={profileMenuOpen ? "Close account menu" : "Open account menu"}
+                aria-label={
+                  profileMenuOpen ? "Close account menu" : "Open account menu"
+                }
                 aria-expanded={profileMenuOpen}
               >
                 <ChevronDown
                   size={21}
-                  className={profileMenuOpen ? "store-auth-chevron open" : "store-auth-chevron"}
+                  className={
+                    profileMenuOpen
+                      ? "store-auth-chevron open"
+                      : "store-auth-chevron"
+                  }
                 />
               </button>
 
