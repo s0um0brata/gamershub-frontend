@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { UserRound, Heart, ShoppingCart, Package } from "lucide-react";
 import authService from "../../features/auth/authService.js";
 import wishlistService from "../../services/wishlistService.js";
+import orderService from "../../services/orderService.js";
 
 import StoreFooter from "./StoreFooter";
 import StoreNavbar from "./StoreNavbar";
 import "../../styles/profile.css";
 
 function Profile() {
-  const [activeSection, setActiveSection] = useState("profile");
+  const location = useLocation();
+  const [activeSection, setActiveSection] = useState(
+    location.state?.activeTab || "profile",
+  );
+
   const [profile, setProfile] = useState(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [profileError, setProfileError] = useState("");
@@ -24,6 +30,10 @@ function Profile() {
   const [wishlist, setWishlist] = useState([]);
   const [wishlistLoading, setWishlistLoading] = useState(false);
   const [wishlistError, setWishlistError] = useState("");
+
+  const [orders, setOrders] = useState([]);
+  const [ordersLoading, setOrdersLoading] = useState(false);
+  const [ordersError, setOrdersError] = useState("");
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -101,10 +111,32 @@ function Profile() {
     }
   };
 
+  const fetchOrders = async () => {
+    try {
+      setOrdersLoading(true);
+      setOrdersError("");
+
+      const response = await orderService.getMyOrders();
+
+      setOrders(response.data?.orders || []);
+    } catch (error) {
+      setOrdersError(
+        error.response?.data?.message || "Unable to load your order history.",
+      );
+    } finally {
+      setOrdersLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeSection === "orders") {
+      fetchOrders();
+    }
+  }, [activeSection]);
+
   const menuItems = [
     { id: "profile", label: "My Profile", icon: UserRound },
     { id: "wishlist", label: "My Wishlist", icon: Heart },
-    // { id: "cart", label: "My Cart", icon: ShoppingCart },
     { id: "orders", label: "My Orders", icon: Package },
   ];
 
@@ -141,6 +173,10 @@ function Profile() {
 
                         if (item.id === "wishlist") {
                           fetchWishlist();
+                        }
+
+                        if (item.id === "orders") {
+                          fetchOrders();
                         }
                       }}
                     >
@@ -307,10 +343,106 @@ function Profile() {
                 </div>
               )}
 
-              {activeSection === "cart" && <p>We'll build your cart next.</p>}
-
               {activeSection === "orders" && (
-                <p>We'll build your order history next.</p>
+                <div className="orders-section">
+                  {ordersLoading ? (
+                    <div className="orders-message">
+                      <p>Loading your orders...</p>
+                    </div>
+                  ) : ordersError ? (
+                    <div className="orders-message orders-error">
+                      {ordersError}
+                    </div>
+                  ) : orders.length === 0 ? (
+                    <div className="orders-empty">
+                      <Package size={42} />
+                      <h3>No orders yet</h3>
+                      <p>Your purchased games will appear here.</p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="orders-list">
+                        {orders.map((order) => (
+                          <article className="order-card" key={order._id}>
+                            <div className="order-card-header">
+                              <div>
+                                <span className="order-label">
+                                  ORDER NUMBER
+                                </span>
+                                <strong>{order.orderNumber}</strong>
+                              </div>
+
+                              <span
+                                className={`order-payment-status ${order.paymentStatus}`}
+                              >
+                                {order.paymentStatus}
+                              </span>
+                            </div>
+
+                            <div className="order-card-games">
+                              {order.items.map((game) => (
+                                <div className="order-game" key={game.game}>
+                                  <img src={game.coverImage} alt={game.title} />
+
+                                  <div className="order-game-details">
+                                    <h3>{game.title}</h3>
+                                    <span>
+                                      ₹
+                                      {Number(game.finalPrice).toLocaleString(
+                                        "en-IN",
+                                      )}
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+
+                            <div className="order-card-footer">
+                              <div>
+                                <span className="order-label">ORDER DATE</span>
+                                <strong>
+                                  {new Date(order.createdAt).toLocaleDateString(
+                                    "en-IN",
+                                    {
+                                      day: "2-digit",
+                                      month: "short",
+                                      year: "numeric",
+                                    },
+                                  )}
+                                </strong>
+                              </div>
+
+                              <div className="order-total">
+                                <span className="order-label">TOTAL PAID</span>
+                                <strong>
+                                  ₹
+                                  {Number(order.totalAmount).toLocaleString(
+                                    "en-IN",
+                                  )}
+                                </strong>
+                              </div>
+                            </div>
+                          </article>
+                        ))}
+                      </div>
+
+                      <div className="order-delivery-notice">
+                        <div className="order-delivery-icon">
+                          <Package size={23} />
+                        </div>
+
+                        <div>
+                          <h3>Your game is on its way!</h3>
+                          <p>
+                            Your game account details and delivery instructions
+                            will be sent to your registered email address
+                            shortly. Keep an eye on your inbox!
+                          </p>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
               )}
             </section>
           </div>

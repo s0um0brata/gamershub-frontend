@@ -14,6 +14,7 @@ function Cart() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [removingGameId, setRemovingGameId] = useState(null);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -25,6 +26,8 @@ function Cart() {
 
         const response = await cartService.getCart();
         setCartData(response.data);
+
+        dispatch(setCartCount(response.data.cartCount));
       } catch (error) {
         setError(error.response?.data?.message || "Unable to load your cart.");
       } finally {
@@ -33,7 +36,7 @@ function Cart() {
     };
 
     fetchCart();
-  }, []);
+  }, [dispatch]);
 
   const cartItems = cartData?.cart || [];
 
@@ -48,10 +51,10 @@ function Cart() {
 
       const response = await cartService.removeFromCart(gameId);
 
-      // Update Redux cart count
+      // Update Redux cart count.
       dispatch(setCartCount(response.data.cartCount));
 
-      // Refresh cart data and order summary
+      // Refresh cart data and order summary.
       const updatedCart = await cartService.getCart();
 
       setCartData(updatedCart.data);
@@ -114,10 +117,15 @@ function Cart() {
                 </div>
 
                 {cartItems.map((game) => {
-                  const finalPrice =
-                    game.discountPrice < game.price
-                      ? game.discountPrice
-                      : game.price;
+                  const originalPrice = Number(game.price) || 0;
+                  const discountPrice = Number(game.discountPrice) || 0;
+
+                  const hasDiscount =
+                    discountPrice > 0 && discountPrice < originalPrice;
+
+                  const finalPrice = hasDiscount
+                    ? discountPrice
+                    : originalPrice;
 
                   return (
                     <article className="cart-page-item" key={game._id}>
@@ -134,9 +142,10 @@ function Cart() {
                         <div className="cart-page-item-price">
                           <strong>₹{finalPrice.toLocaleString("en-IN")}</strong>
 
-                          {game.discountPrice < game.price && (
-                            <del>₹{game.price.toLocaleString("en-IN")}</del>
+                          {hasDiscount && (
+                            <del>₹{originalPrice.toLocaleString("en-IN")}</del>
                           )}
+
                           <button
                             type="button"
                             className="cart-remove-button"
@@ -159,20 +168,28 @@ function Cart() {
 
                 <div className="cart-summary-row">
                   <span>Subtotal</span>
-                  <strong>₹{cartData.subtotal?.toLocaleString("en-IN")}</strong>
+                  <strong>
+                    ₹{(Number(cartData.subtotal) || 0).toLocaleString("en-IN")}
+                  </strong>
                 </div>
 
                 <div className="cart-summary-row">
                   <span>Discount</span>
                   <strong className="cart-discount">
-                    -₹{cartData.totalDiscount?.toLocaleString("en-IN")}
+                    -₹
+                    {(Number(cartData.totalDiscount) || 0).toLocaleString(
+                      "en-IN",
+                    )}
                   </strong>
                 </div>
 
                 <div className="cart-summary-total">
                   <span>Total Payable</span>
                   <strong>
-                    ₹{cartData.totalPayable?.toLocaleString("en-IN")}
+                    ₹
+                    {(Number(cartData.totalPayable) || 0).toLocaleString(
+                      "en-IN",
+                    )}
                   </strong>
                 </div>
 

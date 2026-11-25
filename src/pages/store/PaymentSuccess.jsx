@@ -76,8 +76,12 @@ function PaymentSuccess() {
                   </strong>
                 </div>
 
-                <Link to="/profile" className="payment-shop-button">
-                  View Your Profile
+                <Link
+                  to="/profile"
+                  state={{ activeTab: "orders" }}
+                  className="payment-shop-button"
+                >
+                  View Your Orders
                 </Link>
               </>
             ) : (
