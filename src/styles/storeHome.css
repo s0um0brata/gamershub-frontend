@@ -2486,13 +2486,13 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .category-modal-overlay {
     padding: 12px;
   }
 
   .category-modal {
-    max-height: 80vh;
+    max-height: 70vh;
     border-radius: 16px;
   }
 
