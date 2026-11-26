@@ -2093,3 +2093,440 @@
     }
   }
 }
+
+/* ================================
+   GAMERSHUB CATEGORIES PAGE
+================================ */
+
+.store-categories-page {
+  min-height: 75vh;
+  padding: 75px 5% 100px;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(139, 92, 246, 0.12),
+      transparent 38%
+    ),
+    #0b0b12;
+  color: #fff;
+}
+
+.store-categories-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.store-categories-heading {
+  margin-bottom: 55px;
+  text-align: center;
+}
+
+.store-categories-heading > span {
+  color: #a78bfa;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+}
+
+.store-categories-heading h1 {
+  margin: 15px 0;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.store-categories-heading p {
+  max-width: 600px;
+  margin: 0 auto;
+  color: #9999ad;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.store-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.store-category-card {
+  position: relative;
+  min-height: 190px;
+  display: flex;
+  align-items: center;
+  padding: 28px;
+  overflow: hidden;
+  border: 1px solid #30303f;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #1b1b2a, #11111b);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.store-category-card::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -70px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.1);
+  filter: blur(35px);
+  transition: all 0.3s ease;
+}
+
+.store-category-card:hover {
+  transform: translateY(-7px);
+  border-color: #8b5cf6;
+  box-shadow: 0 15px 40px rgba(139, 92, 246, 0.13);
+}
+
+.store-category-card:hover::before {
+  background: rgba(139, 92, 246, 0.25);
+}
+
+.store-category-card-content {
+  position: relative;
+  z-index: 1;
+}
+
+.store-category-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 20px;
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  border-radius: 12px;
+  background: rgba(139, 92, 246, 0.13);
+  color: #a78bfa;
+}
+
+.store-category-card h2 {
+  margin: 0 0 10px;
+  color: #fff;
+  font-size: 21px;
+  font-weight: 750;
+}
+
+.store-category-card p {
+  margin: 0;
+  color: #9999ad;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+@media (max-width: 1000px) {
+  .store-categories-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .store-categories-page {
+    padding: 55px 5% 75px;
+  }
+
+  .store-categories-heading {
+    margin-bottom: 35px;
+  }
+
+  .store-categories-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .store-category-card {
+    min-height: 165px;
+    padding: 23px;
+  }
+}
+
+/* ================================
+   ANIMATED CATEGORIES BACKGROUND
+================================ */
+
+.store-categories-page {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Floating ambient lights */
+.store-categories-page::before,
+.store-categories-page::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.store-categories-page::before {
+  top: 5%;
+  left: -180px;
+  background: #7c3aed;
+  animation: categoryGlowOne 12s ease-in-out infinite alternate;
+}
+
+.store-categories-page::after {
+  right: -180px;
+  bottom: 0;
+  background: #4f46e5;
+  animation: categoryGlowTwo 15s ease-in-out infinite alternate;
+}
+
+/* Keep page content above background effects */
+.store-categories-container {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes categoryGlowOne {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(180px, 120px) scale(1.2);
+  }
+  100% {
+    transform: translate(80px, 260px) scale(0.9);
+  }
+}
+
+@keyframes categoryGlowTwo {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-160px, -130px) scale(1.25);
+  }
+  100% {
+    transform: translate(-60px, -250px) scale(0.9);
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .store-categories-page::before,
+  .store-categories-page::after {
+    animation: none;
+  }
+}
+
+/* ================================
+   CATEGORY GAMES MODAL
+================================ */
+
+.category-modal-overlay {
+  position: fixed;
+  inset: 70px 0 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(5, 5, 12, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: categoryOverlayFade 0.25s ease;
+}
+
+.category-modal {
+  width: 100%;
+  max-width: 850px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: 20px;
+  background: linear-gradient(145deg, #191927, #10101a);
+  box-shadow: 0 25px 90px rgba(0, 0, 0, 0.65);
+  animation: categoryModalEnter 0.3s ease;
+}
+
+.category-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px 30px;
+  border-bottom: 1px solid #30303f;
+  background: radial-gradient(
+    circle at 10% 0%,
+    rgba(139, 92, 246, 0.15),
+    transparent 65%
+  );
+}
+
+.category-modal-header span {
+  color: #a78bfa;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.category-modal-header h2 {
+  margin: 10px 0;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.category-modal-header p {
+  margin: 0;
+  color: #9999ad;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.category-modal-close {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #39394a;
+  border-radius: 10px;
+  background: #222232;
+  color: #ccc;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.category-modal-close:hover {
+  border-color: #a78bfa;
+  background: rgba(139, 92, 246, 0.2);
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+.category-modal-body {
+  min-height: 180px;
+  padding: 25px 30px 30px;
+  overflow-y: auto;
+}
+
+.category-modal-games {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.category-modal-game {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px;
+  border: 1px solid #30303f;
+  border-radius: 12px;
+  background: #1d1d2b;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.category-modal-game:hover {
+  border-color: #8b5cf6;
+  background: #252438;
+  transform: translateY(-3px);
+}
+
+.category-modal-game img {
+  width: 85px;
+  height: 105px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  object-fit: cover;
+  background: #11111b;
+}
+
+.category-modal-game-info {
+  min-width: 0;
+}
+
+.category-modal-game-info h3 {
+  margin: 0 0 10px;
+  color: #f5f3ff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.category-modal-game-info p {
+  margin: 0;
+  color: #a78bfa;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+@keyframes categoryOverlayFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes categoryModalEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+  .category-modal-overlay {
+    padding: 12px;
+  }
+
+  .category-modal {
+    max-height: 90vh;
+    border-radius: 16px;
+  }
+
+  .category-modal-header {
+    padding: 22px 18px;
+  }
+
+  .category-modal-header h2 {
+    font-size: 23px;
+  }
+
+  .category-modal-body {
+    padding: 18px;
+  }
+
+  .category-modal-games {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .category-modal-game img {
+    width: 75px;
+    height: 90px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-modal-overlay,
+  .category-modal {
+    animation: none;
+  }
+
+  .category-modal-game,
+  .category-modal-close {
+    transition: none;
+  }
+}

@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { useLayoutEffect } from "react";
 
 import AdminLogin from "./pages/auth/AdminLogin.jsx";
 import AdminGames from "./pages/admin/AdminGames.jsx";
@@ -17,35 +18,54 @@ import Cart from "./components/store/Cart.jsx";
 import Payment from "./pages/store/Payment.jsx";
 import PaymentSuccess from "./pages/store/PaymentSuccess.jsx";
 import PaymentCancel from "./pages/store/PaymentCancel.jsx";
+import Categories from "./pages/store/Categories.jsx";
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useLayoutEffect(() => {
+    // Disable browser's automatic scroll restoration
+    window.history.scrollRestoration = "manual";
+
+    // Always start the new page at the top
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<StoreHome />} />
-      <Route path="/game/:slug" element={<GameDetails />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/cart" element={<Cart />} />
-      <Route path="/payment" element={<Payment />} />
-      <Route path="/cart/payment" element={<Payment />} />
-      <Route path="/payment/success" element={<PaymentSuccess />} />
-      <Route path="/payment/cancel" element={<PaymentCancel />} />
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<StoreHome />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/game/:slug" element={<GameDetails />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="/cart/payment" element={<Payment />} />
+        <Route path="/payment/success" element={<PaymentSuccess />} />
+        <Route path="/payment/cancel" element={<PaymentCancel />} />
 
-      <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
 
-      <Route element={<ProtectedAdminRoute />}>
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="games" element={<AdminGames />} />
-          <Route path="games/add" element={<AddGame />} />
-          <Route path="games/edit/:gameId" element={<EditGame />} />
-          <Route path="categories" element={<AdminCategories />} />
+        <Route element={<ProtectedAdminRoute />}>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="games" element={<AdminGames />} />
+            <Route path="games/add" element={<AddGame />} />
+            <Route path="games/edit/:gameId" element={<EditGame />} />
+            <Route path="categories" element={<AdminCategories />} />
+          </Route>
         </Route>
-      </Route>
 
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 }
 

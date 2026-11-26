@@ -23,6 +23,13 @@ const getAdminCategories = async () => {
   return response.data;
 };
 
+// Get all active categories for the store
+const getPublicCategories = async () => {
+  const response = await api.get("/admin/categories/public");
+
+  return response.data;
+};
+
 // Create a new category
 const createCategory = async (categoryData) => {
   const response = await api.post("/admin/categories", categoryData);
@@ -74,7 +81,8 @@ const adminService = {
   deactivateCategory,
   updateGame,
   getAdminGameById,
-  permanentlyDeleteGame
+  permanentlyDeleteGame,
+  getPublicCategories
 };
 
 export default adminService;
