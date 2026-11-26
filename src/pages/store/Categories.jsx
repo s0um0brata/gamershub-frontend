@@ -5,8 +5,10 @@ import adminService from "../../services/adminService.js";
 import gameService from "../../services/gameService.js";
 import StoreNavbar from "./StoreNavbar.jsx";
 import StoreFooter from "./StoreFooter.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Categories() {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -161,7 +163,11 @@ function Categories() {
                 ) : (
                   <div className="category-modal-games">
                     {categoryGames.map((game) => (
-                      <div className="category-modal-game" key={game._id}>
+                      <div
+                        className="category-modal-game"
+                        key={game._id}
+                        onClick={() => navigate(`/game/${game.slug}`)}
+                      >
                         <img src={game.coverImage} alt={game.title} />
 
                         <div className="category-modal-game-info">

@@ -19,6 +19,7 @@ import Payment from "./pages/store/Payment.jsx";
 import PaymentSuccess from "./pages/store/PaymentSuccess.jsx";
 import PaymentCancel from "./pages/store/PaymentCancel.jsx";
 import Categories from "./pages/store/Categories.jsx";
+import Store from "./pages/store/Store.jsx";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -40,6 +41,7 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<StoreHome />} />
+        <Route path="/store" element={<Store />} />
         <Route path="/categories" element={<Categories />} />
         <Route path="/game/:slug" element={<GameDetails />} />
         <Route path="/register" element={<Register />} />
