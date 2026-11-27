@@ -1227,6 +1227,12 @@
   gap: 10px;
 }
 
+@media(max-width:900px) {
+  .game-details-actions {
+    flex-direction: column;
+  }  
+}
+
 .game-wishlist-btn {
   display: inline-flex;
   align-items: center;
